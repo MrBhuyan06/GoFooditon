@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Carousel from "./Carousel.js";
 import Resturent from "./ResturentCard.js";
 import { ResturentList } from "../confic.js";
 import { useState } from "react";
-
+import Shimmer from "./Shimer.js";
 // Filter Function
 function fliterResto(searchTxt, Resto) {
   const filterDatas = Resto.filter((resto) => {
@@ -16,9 +16,34 @@ const Body = () => {
   // Declaring The state for the searchtext
   const [searchTxt, setSearchTxt] = useState("");
   //Declaring the state for the resto list so that we can pass the list for seacrh resto in the map
-  const [resturentList, setResturentList] = useState(ResturentList);
+  const [resturentList, setResturentList] = useState([]);
 
-  return (
+  console.log("render");
+  // Lets deep Drive to useEffect
+  // It is used to render somethink after the inistial render
+  // for rendering the compenets as the prop or the state change
+  useEffect(() => {
+    // Let make a Api class here
+    console.log("hello");
+    getResturentData();
+  }, []);
+
+  //  api function to get the data
+  async function getResturentData() {
+    const data = await fetch(
+      "https://www.swiggy.com/dapi/restaurants/list/v5?lat=20.281612&lng=85.88029879999999&page_type=DESKTOP_WEB_LISTING"
+    );
+    const readableData = await data.json();
+    console.log(readableData);
+
+    setResturentList(readableData?.data?.cards[0]?.data?.data?.cards);
+  }
+
+  // early return
+
+  return resturentList?.length === 0 ? (
+    <Shimmer />
+  ) : (
     <>
       <Carousel />
 
@@ -69,8 +94,8 @@ const Body = () => {
        */}
       <div className=" mt-5 w-4/5 mx-auto container  space-y-4 item-start justify-between resturen-list f flex flex-row flex-wrap space-x-1 ">
         {resturentList.map((resto) => {
-          console.log("helllo");
-          console.log(resto);
+          // console.log("helllo");
+          // console.log(resto);
           return <Resturent {...resto.data} key={resto.data.id} />;
         })}
       </div>
