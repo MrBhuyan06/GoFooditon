@@ -1,11 +1,11 @@
 import { IMG_URL } from "../confic.js";
 const Resturent = ({
-  name,
-  cuisines,
+  name = "Loading..",
+  cuisines = "Loading..",
   city,
-  slugs,
-  cloudinaryImageId,
-  avgRating,
+  slugs = "Loading",
+  cloudinaryImageId = "https://via.placeholder.com/350x150",
+  avgRating = "Loading",
 }) => {
   return (
     <>
