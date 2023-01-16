@@ -16,7 +16,9 @@ const Body = () => {
   // Declaring The state for the searchtext
   const [searchTxt, setSearchTxt] = useState("");
   //Declaring the state for the resto list so that we can pass the list for seacrh resto in the map
-  const [resturentList, setResturentList] = useState([]);
+  const [resturentListAll, setResturentListAll] = useState([]);
+
+  const [filterResturentList, setFilterResturentLIst] = useState([]);
 
   console.log("render");
   // Lets deep Drive to useEffect
@@ -36,12 +38,19 @@ const Body = () => {
     const readableData = await data.json();
     console.log(readableData);
 
-    setResturentList(readableData?.data?.cards[0]?.data?.data?.cards);
+    setResturentListAll(readableData?.data?.cards[2]?.data?.data?.cards);
+    setFilterResturentLIst(readableData?.data?.cards[2]?.data?.data?.cards);
   }
 
   // early return
+  // for the init render resturentList will be null so we cant define map on undefine
+  // so this is use
+  if (!resturentListAll) {
+    return;
+  }
 
-  return resturentList?.length === 0 ? (
+  // This condition for the time when we have blank search input to render all the card
+  return filterResturentList?.length === 0 ? (
     <Shimmer />
   ) : (
     <>
@@ -65,10 +74,10 @@ const Body = () => {
             className="btn btn-square"
             onClick={() => {
               // A function will be call to filter the resto for search
-              const filterData = fliterResto(searchTxt, resturentList);
+              const filterData = fliterResto(searchTxt, resturentListAll);
               // setSearchTxt(filterData);
               console.log("filter Data", filterData);
-              setResturentList(filterData);
+              setFilterResturentLIst(filterData);
             }}
           >
             <svg
@@ -93,7 +102,7 @@ const Body = () => {
        * This the Card Components
        */}
       <div className=" mt-5 w-4/5 mx-auto container  space-y-4 item-start justify-between resturen-list f flex flex-row flex-wrap space-x-1 ">
-        {resturentList.map((resto) => {
+        {filterResturentList.map((resto) => {
           // console.log("helllo");
           // console.log(resto);
           return <Resturent {...resto.data} key={resto.data.id} />;

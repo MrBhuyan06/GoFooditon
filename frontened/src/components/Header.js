@@ -96,6 +96,7 @@ const Header = () => {
             </div>
           </button>
         </div>
+        <button className="btn   btn-outline btn-success">Login</button>
       </div>
     </>
   );
