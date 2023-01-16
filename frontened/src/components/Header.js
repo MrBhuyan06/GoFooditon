@@ -1,4 +1,7 @@
+import React, { useState } from "react";
+
 const Header = () => {
+  const [isLogedIn, setIsLogedIn] = useState(false);
   return (
     <>
       <div className="navbar  bg-sky-100">
@@ -96,7 +99,21 @@ const Header = () => {
             </div>
           </button>
         </div>
-        <button className="btn   btn-outline btn-success">Login</button>
+        {isLogedIn ? (
+          <button
+            className="btn   btn-outline btn-success"
+            onClick={() => setIsLogedIn(false)}
+          >
+            Logout
+          </button>
+        ) : (
+          <button
+            className="btn   btn-outline btn-success"
+            onClick={() => setIsLogedIn(true)}
+          >
+            Login
+          </button>
+        )}
       </div>
     </>
   );
